@@ -19,9 +19,82 @@ model User {
 }
 
 model Post {
-  id        String  @id @default(uuid())
-  title     String
-  body      String
-  author    User    @relation(fields: [author_id], references: [id])
-  author_id String
+  id          String    @id @default(uuid())
+  title       String
+  body        String
+  author      User      @relation(fields: [author_id], references: [id])
+  author_id   String
+  created_at  DateTime  @default(now())
+}
+
+model Employee {
+  id        String @id @default(uuid())
+  name      String
+  last_name String
+  email     String @unique
+  age       Int
+  role      Roles
+  projects  Project[]
+}
+
+// M -> M
+model Project {
+  id          String @id @default(uuid())
+  name        String
+  client_name String
+  start_date  DateTime
+  employees   Employee[]
+}
+
+enum Roles {
+  DESARROLLADOR
+  DISENYADOR
+  ADMINISTRADOR
+}
+
+model Provider {
+  id            String @id @default(uuid())
+  name          String
+  country       String
+  contact_email String
+  contact_phone String
+  products      Products[]
+}
+
+model Products {
+  id          String    @id @default(uuid())
+  name        String
+  type        Type
+  provider    Provider  @relation(fields:[provider_id], references:[id])
+  provider_id String
+}
+
+enum Type {
+  ELETRONIC
+  MOBILE
+  COMPUTER
+}
+
+enum BillStatus {
+  PAID
+  PENDING
+  PARTIALLY_PAID
+}
+
+model Client {
+  id        String    @id @default(uuid())
+  rfc       String
+  email     String @unique
+  name      String
+  last_name String
+  bills     Bill[]
+}
+
+
+model Bill {
+  id        String    @id @default(uuid())
+  date      DateTime
+  client_id String
+  status    BillStatus
+  client    Client @relation(fields:[client_id], references:[id])
 }

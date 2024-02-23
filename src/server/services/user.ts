@@ -7,7 +7,7 @@ export const getUsers = async () => {
 }
 
 export const createUser = async (name: string, email: string) => {
-  await db.user.create({
+  return await db.user.create({
     data: {
       email, name,
     }
